@@ -41,16 +41,32 @@ class TestParseValue < Test::Unit::TestCase
 
   def test_parse_value_emphasis
       assert_equal([
-        Facwparser::Element::Text.new('1', '1'),
+        Facwparser::Element::Text.new('1 ', '1 '),
         Facwparser::Element::Emphasis.new('_hoge_', 'hoge'),
+        Facwparser::Element::Text.new(' 2', ' 2')
+    ], Facwparser::Parser.parse_value('1 _hoge_ 2', {}))
+  end
+
+  def test_parse_value_emphasis_nospace
+      assert_equal([
+        Facwparser::Element::Text.new('1', '1'),
+        Facwparser::Element::Text.new('_hoge_', '_hoge_'),
         Facwparser::Element::Text.new('2', '2')
     ], Facwparser::Parser.parse_value('1_hoge_2', {}))
   end
 
   def test_parse_value_strike
       assert_equal([
-        Facwparser::Element::Text.new('1', '1'),
+        Facwparser::Element::Text.new('1 ', '1 '),
         Facwparser::Element::Strike.new('-hoge\-i-', 'hoge-i'),
+        Facwparser::Element::Text.new(' 2', ' 2')
+    ], Facwparser::Parser.parse_value('1 -hoge\-i- 2', {}))
+  end
+
+  def test_parse_value_strike_nospace
+      assert_equal([
+        Facwparser::Element::Text.new('1', '1'),
+        Facwparser::Element::Text.new('-hoge\-i-', '-hoge-i-'),
         Facwparser::Element::Text.new('2', '2')
     ], Facwparser::Parser.parse_value('1-hoge\-i-2', {}))
   end

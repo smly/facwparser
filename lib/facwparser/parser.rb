@@ -152,9 +152,17 @@ module Facwparser
           when s.scan(/\*(.+?)(?<!\\)\*/)
             children << Element::Strong.new(s[0], unescape_text(s[1]))
           when s.scan(/\_(.+?)(?<!\\)\_/)
-            children << Element::Emphasis.new(s[0], unescape_text(s[1]))
+            if s.pre_match =~ /\s$/
+              children << Element::Emphasis.new(s[0], unescape_text(s[1]))
+            else
+              children << Element::Text.new(s[0], unescape_text("_#{s[1]}_"))
+            end
           when s.scan(/\-(.+?)(?<!\\)\-/)
-            children << Element::Strike.new(s[0], unescape_text(s[1]))
+            if s.pre_match =~ /\s$/
+              children << Element::Strike.new(s[0], unescape_text(s[1]))
+            else
+              children << Element::Text.new(s[0], unescape_text("-#{s[1]}-"))
+            end
           when s.scan(/\+(.+?)(?<!\\)\+/)
             children << Element::Under.new(s[0], unescape_text(s[1]))
           when s.scan(/\^(.+?)(?<!\\)\^/)
